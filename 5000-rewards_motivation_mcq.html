@@ -1,0 +1,257 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewards Technique for Team Motivation - MCQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .question p {
+            margin: 0 0 10px;
+        }
+        .options label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        .answer-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .answer-btn:hover {
+            background-color: #45a049;
+        }
+        .answer {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e8f4f8;
+            border-left: 4px solid #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rewards Technique for Team Motivation - MCQ</h1>
+    <div class="question" id="q1">
+        <p><strong>Question 1:</strong> In a software development team, the manager notices that developers are working overtime to meet deadlines but seem disengaged. To boost motivation, the manager decides to implement a reward system. Which approach is most likely to enhance intrinsic motivation?</p>
+        <div class="options">
+            <label><input type="radio" name="q1" value="a"> a) Offer a cash bonus for meeting deadlines.</label>
+            <label><input type="radio" name="q1" value="b"> b) Provide public recognition for creative solutions during team meetings.</label>
+            <label><input type="radio" name="q1" value="c"> c) Give gift cards to the fastest coders.</label>
+            <label><input type="radio" name="q1" value="d"> d) Increase overtime pay rates.</label>
+        </div>
+        <button class="answer-btn" onclick="toggleAnswer('answer1')">Show Answer</button>
+        <div class="answer" id="answer1">
+            <p><strong>Correct Answer: b)</strong> Provide public recognition for creative solutions during team meetings.</p>
+            <p><strong>Explanation:</strong> Intrinsic motivation stems from internal satisfaction, such as feeling valued or accomplished. Public recognition for creative solutions acknowledges individual contributions and fosters a sense of purpose, enhancing intrinsic motivation. Options a), c), and d) are extrinsic rewards (monetary or tangible), which may boost short-term performance but are less effective for sustaining long-term engagement.</p>
+        </div>
+    </div>
+
+    <div class="question" id="q2">
+        <p><strong>Question 2:</strong> A sales team exceeds its quarterly targets, and the manager wants to reward them. However, the budget is limited. What is the most cost-effective reward that still motivates the team?</p>
+        <div class="options">
+            <label><input type="radio" name="q2" value="a"> a) A team outing to an expensive restaurant.</label>
+            <label><input type="radio" name="q2" value="b"> b) A personalized thank-you note from the CEO.</label>
+            <label><input type="radio" name="q2" value="c"> c) A cash bonus for each team member.</label>
+            <label><input type="radio" name="q2" value="d"> d) New office equipment for the team.</label>
+        </div>
+        <button class="answer-btn" onclick="toggleAnswer('answer2')">Show Answer</button>
+        <div class="answer" id="answer2">
+            <p><strong>Correct Answer: b)</strong> A personalized thank-you note from the CEO.</p>
+            <p><strong>Explanation:</strong> Non-monetary rewards like personalized thank-you notes are highly cost-effective and can significantly boost morale by making employees feel appreciated. Options a), c), and d) involve higher costs and may not be as impactful for long-term motivation, especially if the team values recognition over material rewards.</p>
+        </div>
+    </div>
+
+    <div class="question" id="q3">
+        <p><strong>Question 3:</strong> A marketing team is launching a new campaign, and the manager wants to use rewards to encourage collaboration. Which reward structure would best promote teamwork?</p>
+        <div class="options">
+            <label><input type="radio" name="q3" value="a"> a) Reward the individual with the most creative idea with a bonus.</label>
+            <label><input type="radio" name="q3" value="b"> b) Offer a team-based reward, like a group outing, if the campaign succeeds.</label>
+            <label><input type="radio" name="q3" value="c"> c) Give gift cards to the top three contributors.</label>
+            <label><input type="radio" name="q3" value="d"> d) Recognize only the team leader for the campaign’s success.</label>
+        </div>
+        <button class="answer-btn" onclick="toggleAnswer('answer3')">Show Answer</button>
+        <div class="answer" id="answer3">
+            <p><strong>Correct Answer: b)</strong> Offer a team-based reward, like a group outing, if the campaign succeeds.</p>
+            <p><strong>Explanation:</strong> Team-based rewards encourage collaboration by aligning individual efforts toward a collective goal. A group outing fosters camaraderie and reinforces teamwork. Options a), c), and d) focus on individual contributions, which may create competition and undermine collaborative efforts.</p>
+        </div>
+    </div>
+
+    <div class="question" id="q4">
+        <p><strong>Question 4:</strong> A project team feels demotivated due to delayed rewards for their last successful project. What is the best way to address this issue in the future?</p>
+        <div class="options">
+            <label><input type="radio" name="q4" value="a"> a) Promise larger rewards for future projects.</label>
+            <label><input type="radio" name="q4" value="b"> b) Provide immediate recognition after project milestones.</label>
+            <label><input type="radio" name="q4" value="c"> c) Increase the budget for rewards.</label>
+            <label><input type="radio" name="q4" value="d"> d) Offer rewards only at the end of the year.</label>
+        </div>
+        <button class="answer-btn" onclick="toggleAnswer('answer4')">Show Answer</button>
+        <div class="answer" id="answer4">
+            <p><strong>Correct Answer: b)</strong> Provide immediate recognition after project milestones.</p>
+            <p><strong>Explanation:</strong> Timely rewards reinforce positive behavior and maintain motivation. Immediate recognition after milestones keeps the team engaged throughout the project. Option a) may raise expectations without addressing timing, c) doesn’t solve the delay issue, and d) further delays rewards, worsening the problem.</p>
+        </div>
+    </div>
+
+    <div class="question" id="q5">
+        <p><strong>Question 5:</strong> An employee in a customer service team prefers flexible work hours over monetary rewards. How should the manager incorporate this preference into the reward system?</p>
+        <div class="options">
+            <label><input type="radio" name="q5" value="a"> a) Ignore the preference and offer a standard bonus.</label>
+            <label><input type="radio" name="q5" value="b"> b) Offer flexible work hours as a reward for excellent performance.</label>
+            <label><input type="radio" name="q5" value="c"> c) Increase the employee’s salary instead.</label>
+            <label><input type="radio" name="q5" value="d"> d) Provide a gift card as a compromise.</label>
+        </div>
+        <button class="answer-btn" onclick="toggleAnswer('answer5')">Show Answer</button>
+        <div class="answer" id="answer5">
+            <p><strong>Correct Answer: b)</strong> Offer flexible work hours as a reward for excellent performance.</p>
+            <p><strong>Explanation:</strong> Personalizing rewards to match individual preferences increases their effectiveness. Offering flexible work hours aligns with the employee’s needs, boosting motivation. Options a), c), and d) disregard the employee’s preference, reducing the reward’s impact.</p>
+        </div>
+    </div>
+
+    <div class="question" id="q6">
+        <p><strong>Question 6:</strong> A manager rewards only the top performers in a team, causing resentment among others. How can the manager improve the reward system to ensure fairness?</p>
+        <div class="options">
+            <label><input type="radio" name="q6" value="a"> a) Reward only the top performers with larger bonuses.</label>
+            <label><input type="radio" name="q6" value="b"> b) Recognize contributions from all team members based on their roles.</label>
+            <label><input type="radio" name="q6" value="c"> c) Stop offering rewards entirely.</label>
+            <label><input type="radio" name="q6" value="d"> d) Give the same reward to everyone regardless of performance.</label>
+        </div>
+        <button class="answer-btn" onclick="toggleAnswer('answer6')">Show Answer</button>
+        <div class="answer" id="answer6">
+            <p><strong>Correct Answer: b)</strong> Recognize contributions from all team members based on their roles.</p>
+            <p><strong>Explanation:</strong> Fairness in rewards involves recognizing diverse contributions, not just top performers. Acknowledging each member’s role fosters inclusivity and reduces resentment. Option a) perpetuates the issue, c) demotivates the team, and d) undermines performance-driven motivation.</p>
+        </div>
+    </div>
+
+    <div class="question" id="q7">
+        <p><strong>Question 7:</strong> A team is working on a long-term project with no immediate results. What type of reward would keep the team motivated throughout?</p>
+        <div class="options">
+            <label><input type="radio" name="q7" value="a"> a) A large bonus at the project’s completion.</label>
+            <label><input type="radio" name="q7" value="b"> b) Small, frequent rewards for achieving interim milestones.</label>
+            <label><input type="radio" name="q7" value="c"> c) A promise of promotion after the project.</label>
+            <label><input type="radio" name="q7" value="d"> d) Extra vacation days at the end of the year.</label>
+        </div>
+        <button class="answer-btn" onclick="toggleAnswer('answer7')">Show Answer</button>
+        <div class="answer" id="answer7">
+            <p><strong>Correct Answer: b)</strong> Small, frequent rewards for achieving interim milestones.</p>
+            <p><strong>Explanation:</strong> Long-term projects require sustained motivation, which small, frequent rewards for milestones provide by breaking the project into manageable goals. Options a), c), and d) delay rewards, risking disengagement during the project.</p>
+        </div>
+    </div>
+
+    <div class="question" id="q8">
+        <p><strong>Question 8:</strong> A manager uses only extrinsic rewards (e.g., bonuses) to motivate a design team, but creativity declines. Why might this be happening?</p>
+        <div class="options">
+            <label><input type="radio" name="q8" value="a"> a) The bonuses are too small.</label>
+            <label><input type="radio" name="q8" value="b"> b) Extrinsic rewards can undermine intrinsic motivation for creative tasks.</label>
+            <label><input type="radio" name="q8" value="c"> c) The team doesn’t value monetary rewards.</label>
+            <label><input type="radio" name="q8" value="d"> d) The manager is not offering enough vacation time.</label>
+        </div>
+        <button class="answer-btn" onclick="toggleAnswer('answer8')">Show Answer</button>
+        <div class="answer" id="answer8">
+            <p><strong>Correct Answer: b)</strong> Extrinsic rewards can undermine intrinsic motivation for creative tasks.</p>
+            <p><strong>Explanation:</strong> Over-reliance on extrinsic rewards can reduce intrinsic motivation for tasks requiring creativity, as employees may focus on the reward rather than the process. This is known as the “overjustification effect.” Options a), c), and d) don’t directly address the link between extrinsic rewards and creativity.</p>
+        </div>
+    </div>
+
+    <div class="question" id="q9">
+        <p><strong>Question 9:</strong> A manager wants to align rewards with organizational goals. The company prioritizes customer satisfaction. What reward system would best support this goal?</p>
+        <div class="options">
+            <label><input type="radio" name="q9" value="a"> a) Reward employees based on the number of tasks completed.</label>
+            <label><input type="radio" name="q9" value="b"> b) Recognize employees who receive positive customer feedback.</label>
+            <label><input type="radio" name="q9" value="c"> c) Offer bonuses for working extra hours.</label>
+            <label><input type="radio" name="q9" value="d"> d) Give rewards for reducing project costs.</label>
+        </div>
+        <button class="answer-btn" onclick="toggleAnswer('answer9')">Show Answer</button>
+        <div class="answer" id="answer9">
+            <p><strong>Correct Answer: b)</strong> Recognize employees who receive positive customer feedback.</p>
+            <p><strong>Explanation:</strong> Aligning rewards with organizational goals means incentivizing behaviors that support those goals. Recognizing positive customer feedback directly ties rewards to customer satisfaction. Options a), c), and d) focus on unrelated metrics, which may not improve customer experience.</p>
+        </div>
+    </div>
+
+    <div class="question" id="q10">
+        <p><strong>Question 10:</strong> A team feels that rewards are distributed inconsistently, leading to distrust. How can the manager rebuild trust in the reward system?</p>
+        <div class="options">
+            <label><input type="radio" name="q10" value="a"> a) Keep reward criteria secret to avoid arguments.</label>
+            <label><input type="radio" name="q10" value="b"> a) Use a random selection process for rewards.</label>
+            <label><input type="radio" name="q10" value="c"> b) Establish clear, transparent criteria for earning rewards.</label>
+            <label><input type="radio" name="q10" value="d"> d) Increase the frequency of rewards without changing the process.</label>
+        </div>
+        <button class="answer-btn" onclick="toggleAnswer('answer10')">Show Answer</button>
+        <div class="answer" id="answer10">
+            <p><strong>Correct Answer: c)</strong> Establish clear, transparent criteria for earning rewards.</p>
+            <p><strong>Explanation:</strong> Transparency in reward systems builds trust by ensuring everyone understands how rewards are earned. Clear criteria reduce perceptions of favoritism or unfairness. Options a) and b) obscure the process, while d) doesn’t address the root cause of distrust.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleAnswer(answerId) {
+            const answer = document.getElementById(answerId);
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+            } else {
+                answer.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herzberg’s Two-Factor Theory MCQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .question p {
+            margin: 0 0 10px;
+        }
+        .options label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        .explanation {
+            display: none;
+            background: #e0f7fa;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 4px solid #00acc1;
+        }
+        .explanation-btn {
+            background: #00acc1;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .explanation-btn:hover {
+            background: #00838f;
+        }
+    </style>
+</head>
+<body>
+    <h1>Herzberg’s Two-Factor Theory MCQ</h1>
+    <div class="question">
+        <p><strong>1.</strong> At a software company, Sarah feels unmotivated because her salary is below industry standards. According to Herzberg’s Two-Factor Theory, this is an example of a:</p>
+        <div class="options">
+            <label><input type="radio" name="q1" value="a"> a) Motivator factor</label>
+            <label><input type="radio" name="q1" value="b"> b) Hygiene factor</label>
+            <label><input type="radio" name="q1" value="c"> c) Intrinsic factor</label>
+            <label><input type="radio" name="q1" value="d"> d) Extrinsic motivator</label>
+        </div>
+        <button class="explanation-btn" onclick="toggleExplanation('exp1')">Show Explanation</button>
+        <div id="exp1" class="explanation">
+            <p><strong>Answer: b) Hygiene factor</strong></p>
+            <p>Hygiene factors, such as salary, company policies, and working conditions, do not motivate when present but cause dissatisfaction when absent or inadequate. Sarah’s low salary is a hygiene factor causing dissatisfaction.</p>
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>2.</strong> John is excited about his new project because it allows him to solve complex problems creatively. This aligns with which aspect of Herzberg’s theory?</p>
+        <div class="options">
+            <label><input type="radio" name="q2" value="a"> a) Hygiene factor</label>
+            <label><input type="radio" name="q2" value="b"> b) Motivator factor</label>
+            <label><input type="radio" name="q2" value="c"> c) Maintenance factor</label>
+            <label><input type="radio" name="q2" value="d"> d) External factor</label>
+        </div>
+        <button class="explanation-btn" onclick="toggleExplanation('exp2')">Show Explanation</button>
+        <div id="exp2" class="explanation">
+            <p><strong>Answer: b) Motivator factor</strong></p>
+            <p>Motivator factors, like challenging work, achievement, and recognition, lead to job satisfaction. John’s excitement about creative problem-solving is a motivator factor.</p>
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>3.</strong> A manager notices that employees are demotivated due to poor office lighting and cramped workspaces. These are examples of:</p>
+        <div class="options">
+            <label><input type="radio" name="q3" value="a"> a) Motivator factors</label>
+            <label><input type="radio" name="q3" value="b"> b) Hygiene factors</label>
+            <label><input type="radio" name="q3" value="c"> c) Growth factors</label>
+            <label><input type="radio" name="q3" value="d"> d) Achievement factors</label>
+        </div>
+        <button class="explanation-btn" onclick="toggleExplanation('exp3')">Show Explanation</button>
+        <div id="exp3" class="explanation">
+            <p><strong>Answer: b) Hygiene factors</strong></p>
+            <p>Working conditions, such as lighting and workspace, are hygiene factors. Their inadequacy causes dissatisfaction, but improving them alone won’t necessarily motivate employees.</p>
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>4.</strong> Emma feels fulfilled because her manager publicly praised her for leading a successful project. This is an example of a:</p>
+        <div class="options">
+            <label><input type="radio" name="q4" value="a"> a) Hygiene factor</label>
+            <label><input type="radio" name="q4" value="b"> b) Motivator factor</label>
+            <label><input type="radio" name="q4" value="c"> c) Safety factor</label>
+            <label><input type="radio" name="q4" value="d"> d) Physiological factor</label>
+        </div>
+        <button class="explanation-btn" onclick="toggleExplanation('exp4')">Show Explanation</button>
+        <div id="exp4" class="explanation">
+            <p><strong>Answer: b) Motivator factor</strong></p>
+            <p>Recognition for achievement is a motivator factor, as it directly contributes to job satisfaction and fulfillment, as per Herzberg’s theory.</p>
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>5.</strong> A company introduces flexible working hours to reduce employee turnover. According to Herzberg, this addresses:</p>
+        <div class="options">
+            <label><input type="radio" name="q5" value="a"> a) Motivator factors</label>
+            <label><input type="radio" name="q5" value="b"> b) Hygiene factors</label>
+            <label><input type="radio" name="q5" value="c"> c) Intrinsic rewards</label>
+            <label><input type="radio" name="q5" value="d"> d) Job enrichment</label>
+        </div>
+        <button class="explanation-btn" onclick="toggleExplanation('exp5')">Show Explanation</button>
+        <div id="exp5" class="explanation">
+            <p><strong>Answer: b) Hygiene factors</strong></p>
+            <p>Flexible working hours are part of company policies, a hygiene factor. Improving them can reduce dissatisfaction but won’t necessarily lead to high motivation.</p>
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>6.</strong> Tom is unmotivated because his role offers no opportunities for career advancement. This is related to which factor in Herzberg’s theory?</p>
+        <div class="options">
+            <label><input type="radio" name="q6" value="a"> a) Hygiene factor</label>
+            <label><input type="radio" name="q6" value="b"> b) Motivator factor</label>
+            <label><input type="radio" name="q6" value="c"> c) Security factor</label>
+            <label><input type="radio" name="q6" value="d"> d) External factor</label>
+        </div>
+        <button class="explanation-btn" onclick="toggleExplanation('exp6')">Show Explanation</button>
+        <div id="exp6" class="explanation">
+            <p><strong>Answer: b) Motivator factor</strong></p>
+            <p>Opportunities for advancement and growth are motivator factors. Their absence leads to a lack of job satisfaction, as seen in Tom’s case.</p>
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>7.</strong> A team feels demotivated because their manager micromanages their work. This is an example of a poor:</p>
+        <div class="options">
+            <label><input type="radio" name="q7" value="a"> a) Motivator factor</label>
+            <label><input type="radio" name="q7" value="b"> b) Hygiene factor</label>
+            <label><input type="radio" name="q7" value="c"> c) Achievement factor</label>
+            <label><input type="radio" name="q7" value="d"> d) Responsibility factor</label>
+        </div>
+        <button class="explanation-btn" onclick="toggleExplanation('exp7')">Show Explanation</button>
+        <div id="exp7" class="explanation">
+            <p><strong>Answer: b) Hygiene factor</strong></p>
+            <p>Interpersonal relationships with supervisors, like micromanagement, are hygiene factors. Poor relationships cause dissatisfaction but don’t directly motivate when improved.</p>
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>8.</strong> Lisa loves her job because she has autonomy to make decisions. This reflects which factor in Herzberg’s theory?</p>
+        <div class="options">
+            <label><input type="radio" name="q8" value="a"> a) Hygiene factor</label>
+            <label><input type="radio" name="q8" value="b"> b) Motivator factor</label>
+            <label><input type="radio" name="q8" value="c"> c) Maintenance factor</label>
+            <label><input type="radio" name="q8" value="d"> d) Extrinsic factor</label>
+        </div>
+        <button class="explanation-btn" onclick="toggleExplanation('exp8')">Show Explanation</button>
+        <div id="exp8" class="explanation">
+            <p><strong>Answer: b) Motivator factor</strong></p>
+            <p>Autonomy and responsibility are motivator factors, as they contribute to job satisfaction by making the work itself more fulfilling, as in Lisa’s case.</p>
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>9.</strong> A company provides health insurance to all employees, but motivation levels remain low. Why might this be, according to Herzberg?</p>
+        <div class="options">
+            <label><input type="radio" name="q9" value="a"> a) Health insurance is a motivator factor</label>
+            <label><input type="radio" name="q9" value="b"> b) Health insurance is a hygiene factor</label>
+            <label><input type="radio" name="q9" value="c"> c) Health insurance is an intrinsic reward</label>
+            <label><input type="radio" name="q9" value="d"> d) Health insurance is unrelated to motivation</label>
+        </div>
+        <button class="explanation-btn" onclick="toggleExplanation('exp9')">Show Explanation</button>
+        <div id="exp9" class="explanation">
+            <p><strong>Answer: b) Health insurance is a hygiene factor</strong></p>
+            <p>Health insurance is a hygiene factor. Providing it prevents dissatisfaction, but it doesn’t inherently motivate employees, as motivation comes from motivator factors like achievement or recognition.</p>
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>10.</strong> To boost team motivation, a manager assigns more challenging tasks to employees. This strategy focuses on improving:</p>
+        <div class="options">
+            <label><input type="radio" name="q10" value="a"> a) Hygiene factors</label>
+            <label><input type="radio" name="q10" value="b"> b) Motivator factors</label>
+            <label><input type="radio" name="q10" value="c"> c) Safety factors</label>
+            <label><input type="radio" name="q10" value="d"> d) External rewards</label>
+        </div>
+        <button class="explanation-btn" onclick="toggleExplanation('exp10')">Show Explanation</button>
+        <div id="exp10" class="explanation">
+            <p><strong>Answer: b) Motivator factors</strong></p>
+            <p>Challenging tasks enhance motivator factors like achievement and responsibility, which directly increase job satisfaction and motivation, according to Herzberg’s theory.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleExplanation(id) {
+            const explanation = document.getElementById(id);
+            if (explanation.style.display === 'none' || explanation.style.display === '') {
+                explanation.style.display = 'block';
+            } else {
+                explanation.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

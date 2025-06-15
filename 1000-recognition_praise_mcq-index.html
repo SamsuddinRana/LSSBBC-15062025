@@ -1,0 +1,197 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recognition and Praise MCQ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .answer, .explanation { display: none; }
+        .answer.show, .explanation.show { display: block; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold text-center mb-8">Recognition and Praise Theory MCQ</h1>
+        <div class="space-y-8">
+            <!-- Question 1 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="text-lg font-semibold">1. Sarah, a team leader, notices that her team member, John, consistently meets project deadlines. How can she apply Recognition and Praise Theory to motivate John?</p>
+                <ul class="list-disc pl-6 mt-2">
+                    <li><input type="radio" name="q1" value="a"> a) Assign him more tasks without acknowledgment</li>
+                    <li><input type="radio" name="q1" value="b"> b) Publicly praise John during a team meeting</li>
+                    <li><input type="radio" name="q1" value="c"> c) Ignore his efforts to avoid favoritism</li>
+                    <li><input type="radio" name="q1" value="d"> d) Criticize him to push for improvement</li>
+                </ul>
+                <button onclick="toggleAnswer('answer1', 'explanation1')" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Show Answer & Explanation</button>
+                <p id="answer1" class="answer mt-4 font-bold">Correct Answer: b) Publicly praise John during a team meeting</p>
+                <p id="explanation1" class="explanation mt-2">Recognition and Praise Theory emphasizes acknowledging employees' efforts to boost motivation. Public praise reinforces positive behavior, enhances John's sense of achievement, and encourages continued performance.</p>
+            </div>
+            <!-- Question 2 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="text-lg font-semibold">2. A manager wants to use Recognition and Praise to improve team morale. Which action aligns best with this theory?</p>
+                <ul class="list-disc pl-6 mt-2">
+                    <li><input type="radio" name="q2" value="a"> a) Offer a monetary bonus only</li>
+                    <li><input type="radio" name="q2" value="b"> b) Send a personalized thank-you email to each team member</li>
+                    <li><input type="radio" name="q2" value="c"> c) Increase workload to show trust</li>
+                    <li><input type="radio" name="q2" value="d"> d) Hold a meeting to discuss errors</li>
+                </ul>
+                <button onclick="toggleAnswer('answer2', 'explanation2')" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Show Answer & Explanation</button>
+                <p id="answer2" class="answer mt-4 font-bold">Correct Answer: b) Send a personalized thank-you email to each team member</p>
+                <p id="explanation2" class="explanation mt-2">Personalized recognition, like a thank-you email, directly acknowledges individual contributions, fostering a sense of value and boosting morale, a core principle of Recognition and Praise Theory.</p>
+            </div>
+            <!-- Question 3 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="text-lg font-semibold">3. Why is timely recognition important in the workplace according to Recognition and Praise Theory?</p>
+                <ul class="list-disc pl-6 mt-2">
+                    <li><input type="radio" name="q3" value="a"> a) It reduces the need for salary increases</li>
+                    <li><input type="radio" name="q3" value="b"> b) It reinforces positive behavior immediately</li>
+                    <li><input type="radio" name="q3" value="c"> c) It simplifies performance reviews</li>
+                    <li><input type="radio" name="q3" value="d"> d) It reduces team conflicts</li>
+                </ul>
+                <button onclick="toggleAnswer('answer3', 'explanation3')" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Show Answer & Explanation</button>
+                <p id="answer3" class="answer mt-4 font-bold">Correct Answer: b) It reinforces positive behavior immediately</p>
+                <p id="explanation3" class="explanation mt-2">Timely recognition strengthens the connection between the action and the reward, making employees feel valued and motivated to repeat the behavior, as per the theory.</p>
+            </div>
+            <!-- Question 4 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="text-lg font-semibold">4. A team member, Lisa, feels demotivated despite working hard. How can Recognition and Praise Theory help?</p>
+                <ul class="list-disc pl-6 mt-2">
+                    <li><input type="radio" name="q4" value="a"> a) Give her a warning to improve</li>
+                    <li><input type="radio" name="q4" value="b"> b) Acknowledge her efforts in front of peers</li>
+                    <li><input type="radio" name="q4" value="c"> c) Assign her a new project</li>
+                    <li><input type="radio" name="q4" value="d"> d) Reduce her responsibilities</li>
+                </ul>
+                <button onclick="toggleAnswer('answer4', 'explanation4')" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Show Answer & Explanation</button>
+                <p id="answer4" class="answer mt-4 font-bold">Correct Answer: b) Acknowledge her efforts in front of peers</p>
+                <p id="explanation4" class="explanation mt-2">Public acknowledgment of Lisa’s hard work validates her efforts, increases her sense of belonging, and boosts motivation, aligning with the theory’s focus on recognition.</p>
+            </div>
+            <!-- Question 5 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="text-lg font-semibold">5. What is a potential downside of inconsistent recognition in a team?</p>
+                <ul class="list-disc pl-6 mt-2">
+                    <li><input type="radio" name="q5" value="a"> a) Increased productivity</li>
+                    <li><input type="radio" name="q5" value="b"> b) Feelings of unfairness or demotivation</li>
+                    <li><input type="radio" name="q5" value="c"> c) Reduced need for feedback</li>
+                    <li><input type="radio" name="q5" value="d"> d) Improved team collaboration</li>
+                </ul>
+                <button onclick="toggleAnswer('answer5', 'explanation5')" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Show Answer & Explanation</button>
+                <p id="answer5" class="answer mt-4 font-bold">Correct Answer: b) Feelings of unfairness or demotivation</p>
+                <p id="explanation5" class="explanation mt-2">Inconsistent recognition can make employees feel overlooked or undervalued, leading to demotivation and perceptions of unfairness, which undermines the theory’s effectiveness.</p>
+            </div>
+            <!-- Question 6 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="text-lg font-semibold">6. How does Recognition and Praise Theory differ from monetary rewards in motivating teams?</p>
+                <ul class="list-disc pl-6 mt-2">
+                    <li><input type="radio" name="q6" value="a"> a) It focuses on financial incentives</li>
+                    <li><input type="radio" name="q6" value="b"> b) It emphasizes emotional and social validation</li>
+                    <li><input type="radio" name="q6" value="c"> c) It requires no manager involvement</li>
+                    <li><input type="radio" name="q6" value="d"> d) It prioritizes task delegation</li>
+                </ul>
+                <button onclick="toggleAnswer('answer6', 'explanation6')" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Show Answer & Explanation</button>
+                <p id="answer6" class="answer mt-4 font-bold">Correct Answer: b) It emphasizes emotional and social validation</p>
+                <p id="explanation6" class="explanation mt-2">Unlike monetary rewards, Recognition and Praise Theory focuses on non-financial acknowledgment, such as verbal praise or public recognition, to fulfill emotional and social needs, enhancing motivation.</p>
+            </div>
+            <!-- Question 7 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="text-lg font-semibold">7. A company implements a monthly 'Employee of the Month' program. How does this align with Recognition and Praise Theory?</p>
+                <ul class="list-disc pl-6 mt-2">
+                    <li><input type="radio" name="q7" value="a"> a) It reduces the need for daily feedback</li>
+                    <li><input type="radio" name="q7" value="b"> b) It publicly acknowledges outstanding performance</li>
+                    <li><input type="radio" name="q7" value="c"> c) It focuses on financial rewards</li>
+                    <li><input type="radio" name="q7" value="d"> d) It simplifies task assignments</li>
+                </ul>
+                <button onclick="toggleAnswer('answer7', 'explanation7')" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Show Answer & Explanation</button>
+                <p id="answer7" class="answer mt-4 font-bold">Correct Answer: b) It publicly acknowledges outstanding performance</p>
+                <p id="explanation7" class="explanation mt-2">The 'Employee of the Month' program publicly recognizes exceptional contributions, aligning with the theory’s emphasis on visible praise to motivate employees.</p>
+            </div>
+            <!-- Question 8 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="text-lg font-semibold">8. Why might private recognition be preferred over public recognition for some employees?</p>
+                <ul class="list-disc pl-6 mt-2">
+                    <li><input type="radio" name="q8" value="a"> a) It is less effective in motivating</li>
+                    <li><input type="radio" name="q8" value="b"> b) Some employees feel uncomfortable with public attention</li>
+                    <li><input type="radio" name="q8" value="c"> c) It requires less effort from managers</li>
+                    <li><input type="radio" name="q8" value="d"> d) It avoids the need for feedback</li>
+                </ul>
+                <button onclick="toggleAnswer('answer8', 'explanation8')" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Show Answer & Explanation</button>
+                <p id="answer8" class="answer mt-4 font-bold">Correct Answer: b) Some employees feel uncomfortable with public attention</p>
+                <p id="explanation8" class="explanation mt-2">Recognition and Praise Theory suggests tailoring recognition to individual preferences. Private recognition respects employees who may feel shy or embarrassed by public praise, ensuring motivation.</p>
+            </div>
+            <!-- Question 9 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="text-lg font-semibold">9. A manager praises a team for completing a project but doesn’t specify contributions. What’s the impact?</p>
+                <ul class="list-disc pl-6 mt-2">
+                    <li><input type="radio" name="q9" value="a"> a) It fully motivates all team members</li>
+                    <li><input type="radio" name="q9" value="b"> b) It may reduce motivation due to lack of specificity</li>
+                    <li><input type="radio" name="q9" value="c"> c) It eliminates the need for individual feedback</li>
+                    <li><input type="radio" name="q9" value="d"> d) It simplifies team management</li>
+                </ul>
+                <button onclick="toggleAnswer('answer9', 'explanation9')" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Show Answer & Explanation</button>
+                <p id="answer9" class="answer mt-4 font-bold">Correct Answer: b) It may reduce motivation due to lack of specificity</p>
+                <p id="explanation9" class="explanation mt-2">Specific recognition, per the theory, is more effective as it clearly links praise to individual contributions, making employees feel valued. Vague praise may seem insincere and less motivating.</p>
+            </div>
+            <!-- Question 10 -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="text-lg font-semibold">10. How can Recognition and Praise Theory improve team collaboration?</p>
+                <ul class="list-disc pl-6 mt-2">
+                    <li><input type="radio" name="q10" value="a"> a) By reducing the need for teamwork</li>
+                    <li><input type="radio" name="q10" value="b"> b) By recognizing collective achievements</li>
+                    <li><input type="radio" name="q10" value="c"> c) By focusing only on individual performance</li>
+                    <li><input type="radio" name="q10" value="d"> d) By eliminating feedback sessions</li>
+                </ul>
+                <button onclick="toggleAnswer('answer10', 'explanation10')" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Show Answer & Explanation</button>
+                <p id="answer10" class="answer mt-4 font-bold">Correct Answer: b) By recognizing collective achievements</p>
+                <p id="explanation10" class="explanation mt-2">Recognizing team efforts fosters a sense of unity and shared purpose, encouraging collaboration and reinforcing positive group dynamics, as supported by the theory.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleAnswer(answerId, explanationId) {
+            const answer = document.getElementById(answerId);
+            const explanation = document.getElementById(explanationId);
+            answer.classList.toggle('show');
+            explanation.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

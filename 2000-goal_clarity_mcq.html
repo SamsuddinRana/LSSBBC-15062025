@@ -1,0 +1,238 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Clarity MCQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .options {
+            margin-left: 20px;
+        }
+        .answer {
+            display: none;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 4px solid #4CAF50;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Goal Clarity Technique: Team Motivation MCQ</h1>
+    <div class="question">
+        <p><strong>1. A project manager notices her team lacks motivation due to unclear objectives. How can applying Goal Clarity help?</strong></p>
+        <div class="options">
+            <p>a) By assigning more tasks to keep the team busy</p>
+            <p>b) By defining specific, measurable goals to guide the team</p>
+            <p>c) By reducing team meetings to save time</p>
+            <p>d) By focusing only on deadlines without detailing tasks</p>
+        </div>
+        <button onclick="toggleAnswer('answer1')">Show Answer</button>
+        <div id="answer1" class="answer">
+            <strong>Answer:</strong> b) By defining specific, measurable goals to guide the team<br>
+            <strong>Explanation:</strong> Goal Clarity involves setting specific, measurable, achievable, relevant, and time-bound (SMART) goals. This provides the team with a clear direction, enhancing motivation by ensuring everyone understands what they are working toward and why it matters.
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>2. A sales team is demotivated because they don’t understand how their efforts contribute to the company’s success. What aspect of Goal Clarity can address this?</strong></p>
+        <div class="options">
+            <p>a) Increasing their sales targets without explanation</p>
+            <p>b) Communicating how their goals align with organizational objectives</p>
+            <p>c) Offering bonuses without context</p>
+            <p>d) Assigning individual tasks without team coordination</p>
+        </div>
+        <button onclick="toggleAnswer('answer2')">Show Answer</button>
+        <div id="answer2" class="answer">
+            <strong>Answer:</strong> b) Communicating how their goals align with organizational objectives<br>
+            <strong>Explanation:</strong> A key component of Goal Clarity is ensuring team members understand the purpose of their goals. Linking individual or team objectives to the broader organizational mission fosters a sense of purpose, boosting motivation.
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>3. A software development team frequently misses deadlines due to vague project requirements. How can Goal Clarity improve this?</strong></p>
+        <div class="options">
+            <p>a) By enforcing stricter deadlines</p>
+            <p>b) By breaking down tasks into clear, actionable steps</p>
+            <p>c) By hiring more developers</p>
+            <p>d) By ignoring the requirements and focusing on coding</p>
+        </div>
+        <button onclick="toggleAnswer('answer3')">Show Answer</button>
+        <div id="answer3" class="answer">
+            <strong>Answer:</strong> b) By breaking down tasks into clear, actionable steps<br>
+            <strong>Explanation:</strong> Goal Clarity emphasizes breaking down complex projects into specific, manageable tasks. This reduces confusion, helps prioritize work, and ensures the team can track progress, leading to better adherence to deadlines.
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>4. A marketing team feels overwhelmed by multiple campaigns. How can Goal Clarity help prioritize their efforts?</strong></p>
+        <div class="options">
+            <p>a) By assigning all campaigns equal priority</p>
+            <p>b) By setting clear priorities based on campaign impact and deadlines</p>
+            <p>c) By reducing the number of campaigns arbitrarily</p>
+            <p>d) By delegating all tasks to one team member</p>
+        </div>
+        <button onclick="toggleAnswer('answer4')">Show Answer</button>
+        <div id="answer4" class="answer">
+            <strong>Answer:</strong> b) By setting clear priorities based on campaign impact and deadlines<br>
+            <strong>Explanation:</strong> Goal Clarity involves prioritizing tasks based on their relevance and impact. By clearly defining which campaigns are most critical, the team can focus their efforts effectively, reducing overwhelm and increasing motivation.
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>5. A team leader notices that team members are disengaged during meetings. How can Goal Clarity improve engagement?</strong></p>
+        <div class="options">
+            <p>a) By discussing only the leader’s goals</p>
+            <p>b) By involving the team in setting and refining goals</p>
+            <p>c) By canceling all team meetings</p>
+            <p>d) By focusing on past failures</p>
+        </div>
+        <button onclick="toggleAnswer('answer5')">Show Answer</button>
+        <div id="answer5" class="answer">
+            <strong>Answer:</strong> b) By involving the team in setting and refining goals<br>
+            <strong>Explanation:</strong> Involving team members in the goal-setting process, a key aspect of Goal Clarity, fosters ownership and accountability. This participatory approach increases engagement as team members feel their input is valued.
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>6. A manufacturing team is unsure about quality standards for their product. How does Goal Clarity address this issue?</strong></p>
+        <div class="options">
+            <p>a) By increasing production speed</p>
+            <p>b) By defining clear quality metrics and expectations</p>
+            <p>c) By reducing quality checks</p>
+            <p>d) By outsourcing production</p>
+        </div>
+        <button onclick="toggleAnswer('answer6')">Show Answer</button>
+        <div id="answer6" class="answer">
+            <strong>Answer:</strong> b) By defining clear quality metrics and expectations<br>
+            <strong>Explanation:</strong> Goal Clarity requires establishing precise standards and metrics for success. For a manufacturing team, clear quality benchmarks provide a tangible target, improving focus and motivation to meet those standards.
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>7. A customer service team struggles with inconsistent responses to clients. How can Goal Clarity help?</strong></p>
+        <div class="options">
+            <p>a) By allowing each member to respond as they see fit</p>
+            <p>b) By providing standardized response protocols tied to team goals</p>
+            <p>c) By reducing client interactions</p>
+            <p>d) By ignoring client feedback</p>
+        </div>
+        <button onclick="toggleAnswer('answer7')">Show Answer</button>
+        <div id="answer7" class="answer">
+            <strong>Answer:</strong> b) By providing standardized response protocols tied to team goals<br>
+            <strong>Explanation:</strong> Goal Clarity ensures consistency by aligning individual actions with team objectives. Standardized protocols tied to clear goals help the team deliver uniform, high-quality responses, boosting confidence and motivation.
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>8. A remote team feels disconnected due to lack of communication. How can Goal Clarity improve team cohesion?</strong></p>
+        <div class="options">
+            <p>a) By minimizing communication to save time</p>
+            <p>b) By regularly sharing progress updates tied to clear goals</p>
+            <p>c) By assigning independent tasks without collaboration</p>
+            <p>d) By avoiding virtual meetings</p>
+        </div>
+        <button onclick="toggleAnswer('answer8')">Show Answer</button>
+        <div id="answer8" class="answer">
+            <strong>Answer:</strong> b) By regularly sharing progress updates tied to clear goals<br>
+            <strong>Explanation:</strong> Goal Clarity includes transparent communication about progress toward shared objectives. Regular updates keep remote teams aligned, foster a sense of connection, and maintain motivation by showing how individual efforts contribute to success.
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>9. A team is demotivated because they don’t see progress in their work. How can Goal Clarity help?</strong></p>
+        <div class="options">
+            <p>a) By setting long-term goals without milestones</p>
+            <p>b) By establishing short-term milestones to track progress</p>
+            <p>c) By ignoring progress tracking</p>
+            <p>d) By focusing only on final outcomes</p>
+        </div>
+        <button onclick="toggleAnswer('answer9')">Show Answer</button>
+        <div id="answer9" class="answer">
+            <strong>Answer:</strong> b) By establishing short-term milestones to track progress<br>
+            <strong>Explanation:</strong> Goal Clarity involves setting measurable milestones to track progress. Celebrating small wins keeps the team motivated by providing tangible evidence of advancement toward larger objectives.
+        </div>
+    </div>
+    <div class="question">
+        <p><strong>10. A manager wants to sustain team motivation over a long project. How can Goal Clarity support this?</strong></p>
+        <div class="options">
+            <p>a) By keeping goals vague to allow flexibility</p>
+            <p>b) By regularly reviewing and adjusting goals as needed</p>
+            <p>c) By setting goals once and never revisiting them</p>
+            <p>d) By focusing only on individual performance</p>
+        </div>
+        <button onclick="toggleAnswer('answer10')">Show Answer</button>
+        <div id="answer10" class="answer">
+            <strong>Answer:</strong> b) By regularly reviewing and adjusting goals as needed<br>
+            <strong>Explanation:</strong> Goal Clarity includes periodic goal reviews to ensure they remain relevant and achievable. Adjusting goals based on progress or challenges keeps the team motivated by maintaining alignment with project realities.
+        </div>
+    </div>
+
+    <script>
+        function toggleAnswer(id) {
+            const answer = document.getElementById(id);
+            if (answer.style.display === "none" || answer.style.display === "") {
+                answer.style.display = "block";
+            } else {
+                answer.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

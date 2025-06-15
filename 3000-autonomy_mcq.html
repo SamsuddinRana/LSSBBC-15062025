@@ -1,0 +1,264 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autonomy in Team Motivation - MCQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .question h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .options label {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+        .explanation {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            border-radius: 3px;
+        }
+        .explanation-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-top: 10px;
+        }
+        .explanation-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Autonomy in Team Motivation - MCQ Test</h1>
+    <p>Test your understanding of autonomy as a technique to enhance team motivation with these real-world scenario-based questions.</p>
+
+    <div class="question" id="q1">
+        <h3>1. A software development team is working on a new project. The manager assigns tasks but allows team members to choose their preferred programming tools and methodologies. How does this approach impact team motivation?</h3>
+        <div class="options">
+            <label><input type="radio" name="q1" value="a"> a) It reduces motivation due to lack of clear direction.</label>
+            <label><input type="radio" name="q1" value="b"> b) It increases motivation by fostering ownership and creativity.</label>
+            <label><input type="radio" name="q1" value="c"> c) It has no impact on motivation.</label>
+            <label><input type="radio" name="q1" value="d"> d) It creates confusion and delays progress.</label>
+        </div>
+        <button class="explanation-button" onclick="toggleExplanation('exp1')">Show Explanation</button>
+        <div class="explanation" id="exp1">
+            <strong>Correct Answer: b) It increases motivation by fostering ownership and creativity.</strong><br>
+            Allowing team members to choose their tools and methodologies gives them autonomy, which enhances their sense of ownership and encourages creative problem-solving. This aligns with autonomy as a key motivator in self-determination theory, boosting engagement and productivity.
+        </div>
+    </div>
+
+    <div class="question" id="q2">
+        <h3>2. In a marketing team, employees are given the freedom to design their own campaign strategies but must meet specific performance goals. What is the primary benefit of this autonomy?</h3>
+        <div class="options">
+            <label><input type="radio" name="q2" value="a"> a) It ensures all campaigns are uniform.</label>
+            <label><input type="radio" name="q2" value="b"> b) It encourages innovative and tailored solutions.</label>
+            <label><input type="radio" name="q2" value="c"> c) It reduces the need for managerial oversight.</label>
+            <label><input type="radio" name="q2" value="d"> d) It minimizes the need for collaboration.</label>
+        </div>
+        <button class="explanation-button" onclick="toggleExplanation('exp2')">Show Explanation</button>
+        <div class="explanation" id="exp2">
+            <strong>Correct Answer: b) It encourages innovative and tailored solutions.</strong><br>
+            Autonomy in designing campaign strategies allows team members to leverage their unique insights and creativity, leading to innovative and effective campaigns. This freedom within defined goals fosters motivation by giving employees control over their work process.
+        </div>
+    </div>
+
+    <div class="question" id="q3">
+        <h3>3. A manager notices that team morale is low due to micromanagement. What autonomy-based strategy could improve motivation?</h3>
+        <div class="options">
+            <label><input type="radio" name="q3" value="a"> a) Assign detailed step-by-step tasks to each member.</label>
+            <label><input type="radio" name="q3" value="b"> b) Allow team members to set their own deadlines within project constraints.</label>
+            <label><input type="radio" name="q3" value="c"> c) Increase supervision to ensure quality.</label>
+            <label><input type="radio" name="q3" value="d"> d) Standardize all processes to reduce errors.</label>
+        </div>
+        <button class="explanation-button" onclick="toggleExplanation('exp3')">Show Explanation</button>
+        <div class="explanation" id="exp3">
+            <strong>Correct Answer: b) Allow team members to set their own deadlines within project constraints.</strong><br>
+            Micromanagement often reduces motivation by limiting autonomy. Allowing team members to set their own deadlines within constraints empowers them, increases accountability, and boosts morale by trusting their judgment, aligning with autonomy's role in motivation.
+        </div>
+    </div>
+
+    <div class="question" id="q4">
+        <h3>4. A sales team is allowed to decide how to approach clients but must follow a strict script during pitches. How does this balance of autonomy affect motivation?</h3>
+        <div class="options">
+            <label><input type="radio" name="q4" value="a"> a) It fully maximizes motivation through complete autonomy.</label>
+            <label><input type="radio" name="q4" value="b"> b) It may limit motivation due to restricted creativity in pitches.</label>
+            <label><input type="radio" name="q4" value="c"> c) It eliminates the need for training.</label>
+            <label><input type="radio" name="q4" value="d"> d) It ensures consistent sales performance.</label>
+        </div>
+        <button class="explanation-button" onclick="toggleExplanation('exp4')">Show Explanation</button>
+        <div class="explanation" id="exp4">
+            <strong>Correct Answer: b) It may limit motivation due to restricted creativity in pitches.</strong><br>
+            While autonomy in approaching clients is motivating, a strict script during pitches limits creative expression, which can reduce motivation. Autonomy is most effective when employees have meaningful control over key aspects of their work.
+        </div>
+    </div>
+
+    <div class="question" id="q5">
+        <h3>5. A project team is struggling with low engagement. The manager decides to let the team choose their project roles based on their strengths. What is the likely outcome?</h3>
+        <div class="options">
+            <label><input type="radio" name="q5" value="a"> a) Increased conflict due to role overlap.</label>
+            <label><input type="radio" name="q5" value="b"> b) Improved engagement due to alignment with personal strengths.</label>
+            <label><input type="radio" name="q5" value="c"> c) No change in engagement levels.</label>
+            <label><input type="radio" name="q5" value="d"> d) Decreased productivity due to lack of direction.</label>
+        </div>
+        <button class="explanation-button" onclick="toggleExplanation('exp5')">Show Explanation</button>
+        <div class="explanation" id="exp5">
+            <strong>Correct Answer: b) Improved engagement due to alignment with personal strengths.</strong><br>
+            Allowing team members to choose roles based on their strengths provides autonomy and aligns tasks with their interests and skills. This increases intrinsic motivation, as employees feel valued and capable, leading to higher engagement.
+        </div>
+    </div>
+
+    <div class="question" id="q6">
+        <h3>6. In a customer service team, employees are given autonomy to resolve customer issues without needing supervisor approval for decisions under $100. How does this impact motivation?</h3>
+        <div class="options">
+            <label><input type="radio" name="q6" value="a"> a) It decreases motivation due to increased responsibility.</label>
+            <label><input type="radio" name="q6" value="b"> b) It increases motivation by empowering employees.</label>
+            <label><input type="radio" name="q6" value="c"> c) It leads to inconsistent customer service.</label>
+            <label><input type="radio" name="q6" value="d"> d) It reduces the need for customer feedback.</label>
+        </div>
+        <button class="explanation-button" onclick="toggleExplanation('exp6')">Show Explanation</button>
+        <div class="explanation" id="exp6">
+            <strong>Correct Answer: b) It increases motivation by empowering employees.</strong><br>
+            Granting autonomy to resolve issues empowers employees, making them feel trusted and capable. This aligns with autonomy as a motivator in self-determination theory, enhancing job satisfaction and engagement.
+        </div>
+    </div>
+
+    <div class="question" id="q7">
+        <h3>7. A design team is allowed to experiment with new tools but must adhere to strict brand guidelines. How does this affect their motivation?</h3>
+        <div class="options">
+            <label><input type="radio" name="q7" value="a"> a) It fully eliminates motivation due to restrictions.</label>
+            <label><input type="radio" name="q7" value="b"> b) It balances motivation by combining freedom with structure.</label>
+            <label><input type="radio" name="q7" value="c"> c) It reduces motivation due to excessive freedom.</label>
+            <label><input type="radio" name="q7" value="d"> d) It has no effect on motivation.</label>
+        </div>
+        <button class="explanation-button" onclick="toggleExplanation('exp7')">Show Explanation</button>
+        <div class="explanation" id="exp7">
+            <strong>Correct Answer: b) It balances motivation by combining freedom with structure.</strong><br>
+            Autonomy in tool choice fosters creativity and motivation, while brand guidelines provide necessary structure to ensure alignment with organizational goals. This balance supports motivation by offering freedom within clear boundaries.
+        </div>
+    </div>
+
+    <div class="question" id="q8">
+        <h3>8. A team is demotivated due to rigid schedules. The manager introduces flexible work hours while maintaining project deadlines. What is the likely impact?</h3>
+        <div class="options">
+            <label><input type="radio" name="q8" value="a"> a) Increased motivation due to greater control over work-life balance.</label>
+            <label><input type="radio" name="q8" value="b"> b) Decreased motivation due to lack of structure.</label>
+            <label><input type="radio" name="q8" value="c"> c) No impact on motivation.</label>
+            <label><input type="radio" name="q8" value="d"> d) Increased conflicts due to scheduling issues.</label>
+        </div>
+        <button class="explanation-button" onclick="toggleExplanation('exp8')">Show Explanation</button>
+        <div class="explanation" id="exp8">
+            <strong>Correct Answer: a) Increased motivation due to greater control over work-life balance.</strong><br>
+            Flexible work hours provide autonomy over scheduling, allowing employees to manage their work-life balance. This autonomy increases motivation by showing trust in employees' ability to meet deadlines while accommodating personal needs.
+        </div>
+    </div>
+
+    <div class="question" id="q9">
+        <h3>9. A manager gives a team autonomy to decide how to allocate a project budget but requires regular progress reports. How does this approach influence motivation?</h3>
+        <div class="options">
+            <label><input type="radio" name="q9" value="a"> a) It reduces motivation due to excessive oversight.</label>
+            <label><input type="radio" name="q9" value="b"> b) It enhances motivation by combining autonomy with accountability.</label>
+            <label><input type="radio" name="q9" value="c"> c) It leads to budget mismanagement.</label>
+            <label><input type="radio" name="q9" value="d"> d) It has no impact on motivation.</label>
+        </div>
+        <button class="explanation-button" onclick="toggleExplanation('exp9')">Show Explanation</button>
+        <div class="explanation" id="exp9">
+            <strong>Correct Answer: b) It enhances motivation by combining autonomy with accountability.</strong><br>
+            Autonomy in budget allocation empowers the team, while progress reports ensure accountability. This balance fosters motivation by giving employees control over resources while maintaining alignment with project goals.
+        </div>
+    </div>
+
+    <div class="question" id="q10">
+        <h3>10. A team with high autonomy reports feeling overwhelmed by decision-making responsibilities. What can the manager do to maintain motivation?</h3>
+        <div class="options">
+            <label><input type="radio" name="q10" value="a"> a) Remove all autonomy to reduce stress.</label>
+            <label><input type="radio" name="q10" value="b"> b) Provide clearer guidelines and support while preserving autonomy.</label>
+            <label><input type="radio" name="q10" value="c"> c) Assign stricter deadlines to focus efforts.</label>
+            <label><input type="radio" name="q10" value="d"> d) Increase micromanagement to guide decisions.</label>
+        </div>
+        <button class="explanation-button" onclick="toggleExplanation('exp10')">Show Explanation</button>
+        <div class="explanation" id="exp10">
+            <strong>Correct Answer: b) Provide clearer guidelines and support while preserving autonomy.</strong><br>
+            Too much autonomy without support can lead to overwhelm. Providing guidelines and resources helps employees make decisions confidently while preserving autonomy, maintaining motivation by balancing freedom with structure.
+        </div>
+    </div>
+
+    <script>
+        function toggleExplanation(id) {
+            const explanation = document.getElementById(id);
+            if (explanation.style.display === "none" || explanation.style.display === "") {
+                explanation.style.display = "block";
+            } else {
+                explanation.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
