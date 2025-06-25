@@ -1,0 +1,174 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Motivation: Development Opportunities Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
+        <h1 class="text-2xl font-bold text-center mb-6">Team Motivation: Development Opportunities Quiz</h1>
+        <form id="quizForm" class="space-y-6">
+            <!-- Question 1 -->
+            <div class="border-b pb-4">
+                <p class="font-semibold">1. Sarah notices her team is disengaged during project meetings. She learns they feel their skills are underutilized. What development opportunity could best motivate them?</p>
+                <label class="block mt-2"><input type="radio" name="q1" value="a"> a) Offer a generic online course on time management</label>
+                <label class="block"><input type="radio" name="q1" value="b"> b) Assign them to cross-functional projects to apply their skills</label>
+                <label class="block"><input type="radio" name="q1" value="c"> c) Increase their workload to keep them busy</label>
+                <label class="block"><input type="radio" name="q1" value="d"> d) Schedule more team-building activities</label>
+            </div>
+            <!-- Question 2 -->
+            <div class="border-b pb-4">
+                <p class="font-semibold">2. John’s team is hesitant to adopt new software. They fear they lack the expertise. What development approach would boost their confidence and motivation?</p>
+                <label class="block mt-2"><input type="radio" name="q2" value="a"> a) Provide hands-on training workshops for the software</label>
+                <label class="block"><input type="radio" name="q2" value="b"> b) Offer a one-time motivational speech</label>
+                <label class="block"><input type="radio" name="q2" value="c"> c) Assign a tight deadline to force quick learning</label>
+                <label class="block"><input type="radio" name="q2" value="d"> d) Ignore their concerns and proceed with implementation</label>
+            </div>
+            <!-- Question 3 -->
+            <div class="border-b pb-4">
+                <p class="font-semibold">3. Emma’s team feels stuck in repetitive tasks. They express interest in career growth. What development opportunity could re-energize them?</p>
+                <label class="block mt-2"><input type="radio" name="q3" value="a"> a) Maintain their current tasks to ensure consistency</label>
+                <label class="block"><input type="radio" name="q3" value="b"> b) Offer mentorship programs with senior leaders</label>
+                <label class="block"><input type="radio" name="q3" value="c"> c) Increase their salary without changing roles</label>
+                <label class="block"><input type="radio" name="q3" value="d"> d) Reduce their work hours to alleviate boredom</label>
+            </div>
+            <!-- Question 4 -->
+            <div class="border-b pb-4">
+                <p class="font-semibold">4. A team member, Alex, shows potential but lacks leadership skills. The team’s morale is low due to poor coordination. What development strategy could motivate Alex and the team?</p>
+                <label class="block mt-2"><input type="radio" name="q4" value="a"> a) Promote Alex immediately to a leadership role</label>
+                <label class="block"><input type="radio" name="q4" value="b"> b) Enroll Alex in a leadership development course</label>
+                <label class="block"><input type="radio" name="q4" value="c"> c) Reprimand Alex for poor performance</label>
+                <label class="block"><input type="radio" name="q4" value="d"> d) Assign Alex simpler tasks to reduce pressure</label>
+            </div>
+            <!-- Question 5 -->
+            <div class="border-b pb-4">
+                <p class="font-semibold">5. Lisa’s team is motivated but lacks innovation in their work. They want to contribute fresh ideas. What development opportunity could spark creativity?</p>
+                <label class="block mt-2"><input type="radio" name="q5" value="a"> a) Enforce stricter guidelines for project execution</label>
+                <label class="block"><input type="radio" name="q5" value="b"> b) Organize brainstorming workshops and innovation labs</label>
+                <label class="block"><input type="radio" name="q5" value="c"> c) Limit their access to external resources</label>
+                <label class="block"><input type="radio" name="q5" value="d"> d) Assign routine tasks to maintain focus</label>
+            </div>
+            <!-- Question 6 -->
+            <div class="border-b pb-4">
+                <p class="font-semibold">6. Mark’s team is diverse, with varying skill levels. Some members feel left behind during complex projects. What development approach could unify and motivate them?</p>
+                <label class="block mt-2"><input type="radio" name="q6" value="a"> a) Standardize tasks for all team members</label>
+                <label class="block"><input type="radio" name="q6" value="b"> b) Offer personalized training plans based on skill gaps</label>
+                <label class="block"><input type="radio" name="q6" value="c"> c) Ignore skill differences to promote equality</label>
+                <label class="block"><input type="radio" name="q6" value="d"> d) Reduce project complexity to accommodate everyone</label>
+            </div>
+            <!-- Question 7 -->
+            <div class="border-b pb-4">
+                <p class="font-semibold">7. Rachel notices her team is reluctant to take risks due to fear of failure. What development opportunity could encourage bold decision-making?</p>
+                <label class="block mt-2"><input type="radio" name="q7" value="a"> a) Punish mistakes to enforce accountability</label>
+                <label class="block"><input type="radio" name="q7" value="b"> b) Provide workshops on risk management and resilience</label>
+                <label class="block"><input type="radio" name="q7" value="c"> c) Avoid challenging projects to build confidence</label>
+                <label class="block"><input type="radio" name="q7" value="d"> d) Limit decision-making to senior team members</label>
+            </div>
+            <!-- Question 8 -->
+            <div class="border-b pb-4">
+                <p class="font-semibold">8. Tom’s team is highly skilled but feels unappreciated for their expertise. What development opportunity could reinforce their value and motivation?</p>
+                <label class="block mt-2"><input type="radio" name="q8" value="a"> a) Assign them routine tasks to maintain humility</label>
+                <label class="block"><input type="radio" name="q8" value="b"> b) Offer opportunities to lead training sessions for others</label>
+                <label class="block"><input type="radio" name="q8" value="c"> c) Reduce their responsibilities to ease pressure</label>
+                <label class="block"><input type="radio" name="q8" value="d"> d) Ignore their complaints to focus on productivity</label>
+            </div>
+            <!-- Question 9 -->
+            <div class="border-b pb-4">
+                <p class="font-semibold">9. Clara’s team struggles with collaboration due to poor communication skills. What development opportunity could improve teamwork and motivation?</p>
+                <label class="block mt-2"><input type="radio" name="q9" value="a"> a) Enforce individual work to avoid conflicts</label>
+                <label class="block"><input type="radio" name="q9" value="b"> b) Provide communication and team-building workshops</label>
+                <label class="block"><input type="radio" name="q9" value="c"> c) Increase project deadlines to reduce stress</label>
+                <label class="block"><input type="radio" name="q9" value="d"> d) Assign a single leader to make all decisions</label>
+            </div>
+            <!-- Question 10 -->
+            <div class="border-b pb-4">
+                <p class="font-semibold">10. David’s team is demotivated after a project failure. They doubt their abilities. What development opportunity could rebuild their confidence?</p>
+                <label class="block mt-2"><input type="radio" name="q10" value="a"> a) Assign a similar high-stakes project immediately</label>
+                <label class="block"><input type="radio" name="q10" value="b"> b) Offer reflective workshops to learn from mistakes</label>
+                <label class="block"><input type="radio" name="q10" value="c"> c) Criticize their performance to push improvement</label>
+                <label class="block"><input type="radio" name="q10" value="d"> d) Avoid discussing the failure to move forward</label>
+            </div>
+            <!-- Submit Button -->
+            <button type="button" onclick="checkAnswers()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full">Submit Answers</button>
+        </form>
+        <!-- Results Section -->
+        <div id="results" class="mt-6 hidden">
+            <h2 class="text-xl font-bold">Results</h2>
+            <p id="score" class="text-lg"></p>
+            <div id="explanations" class="mt-4 space-y-4"></div>
+        </div>
+    </div>
+    <script>
+        function checkAnswers() {
+            const correctAnswers = {
+                q1: 'b', q2: 'a', q3: 'b', q4: 'b', q5: 'b',
+                q6: 'b', q7: 'b', q8: 'b', q9: 'b', q10: 'b'
+            };
+            const explanations = {
+                q1: 'Assigning cross-functional projects allows team members to utilize their skills, increasing engagement and motivation.',
+                q2: 'Hands-on training builds expertise and confidence, motivating the team to adopt new software.',
+                q3: 'Mentorship programs provide growth opportunities, re-energizing the team by aligning with their career aspirations.',
+                q4: 'A leadership development course equips Alex with skills, improving coordination and team morale.',
+                q5: 'Brainstorming workshops foster creativity, motivating the team to contribute innovative ideas.',
+                q6: 'Personalized training addresses skill gaps, unifying the team and boosting motivation.',
+                q7: 'Workshops on risk management encourage bold decisions by reducing fear of failure.',
+                q8: 'Leading training sessions recognizes expertise, reinforcing value and motivation.',
+                q9: 'Communication workshops improve collaboration, enhancing teamwork and motivation.',
+                q10: 'Reflective workshops help the team learn from failure, rebuilding confidence and motivation.'
+            };
+            let score = 0;
+            let resultsHtml = '';
+            for (let i = 1; i <= 10; i++) {
+                const userAnswer = document.querySelector(`input[name="q${i}"]:checked`)?.value;
+                const isCorrect = userAnswer === correctAnswers[`q${i}`];
+                if (isCorrect) score++;
+                resultsHtml += `<div><strong>Question ${i}:</strong> ${isCorrect ? 'Correct' : 'Incorrect'}<br>Explanation: ${explanations[`q${i}`]}</div>`;
+            }
+            document.getElementById('score').textContent = `Your Score: ${score}/10`;
+            document.getElementById('explanations').innerHTML = resultsHtml;
+            document.getElementById('results').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
